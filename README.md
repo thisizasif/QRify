@@ -1,6 +1,6 @@
 # QRify | Online QR Code Scanner
 
-![QRify Banner](https://github.com/thisizasif/qrify/blob/main/qrify-banner.png?raw=true)
+![QRify Banner](https://github.com/thisizasif/QRify/blob/main/QRify.png?raw=true)
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-0099ff?style=for-the-badge)](https://thisizasif.github.io/qrify)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](https://opensource.org/licenses/MIT)
