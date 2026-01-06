@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRBiz Pro | Professional Business QR Code Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #0a192f, #112240, #0a192f);
+            color: #e0e0ff;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            background: linear-gradient(to right, #00dbde, #0099ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .tagline {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: #a0a0ff;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .input-section, .output-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(20, 30, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(100, 150, 255, 0.15);
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.3rem, 3vw, 1.5rem);
+            margin-bottom: 25px;
+            color: #00dbde;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 219, 222, 0.3);
+        }
+        
+        .section-title i {
+            color: #0099ff;
+        }
+        
+        .business-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .category-btn {
+            background: rgba(30, 40, 70, 0.7);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #b0c4ff;
+            min-height: 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .category-btn:hover {
+            background: rgba(50, 70, 120, 0.7);
+            transform: translateY(-3px);
+            border-color: #00dbde;
+            box-shadow: 0 5px 15px rgba(0, 219, 222, 0.2);
+        }
+        
+        .category-btn.active {
+            background: linear-gradient(135deg, rgba(0, 219, 222, 0.2), rgba(0, 153, 255, 0.2));
+            border-color: #00dbde;
+            color: white;
+        }
+        
+        .category-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        
+        .fields-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .field-group {
+            background: rgba(15, 25, 45, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #0099ff;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .field-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .field-title-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .field-title {
+            font-weight: 600;
+            color: #b0c4ff;
+            font-size: clamp(1rem, 2vw, 1.1rem);
+        }
+        
+        .edit-field-name {
+            background: transparent;
+            border: none;
+            color: #00dbde;
+            cursor: pointer;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            min-height: 36px;
+        }
+        
+        .edit-field-name:hover {
+            opacity: 1;
+        }
+        
+        .field-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .remove-field, .move-field {
+            background: rgba(255, 50, 50, 0.2);
+            color: #ff6666;
+            border: 1px solid rgba(255, 50, 50, 0.3);
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            min-height: 36px;
+            min-width: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .move-field {
+            background: rgba(100, 100, 255, 0.2);
+            color: #a0a0ff;
+            border-color: rgba(100, 100, 255, 0.3);
+        }
+        
+        .remove-field:hover {
+            background: rgba(255, 50, 50, 0.4);
+            transform: scale(1.05);
+        }
+        
+        .move-field:hover {
+            background: rgba(100, 100, 255, 0.4);
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            background: rgba(10, 20, 40, 0.8);
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            border-radius: 8px;
+            color: #e0e0ff;
+            padding: 14px 15px;
+            font-size: clamp(0.95rem, 2vw, 1rem);
+            font-family: 'Exo 2', sans-serif;
+            transition: all 0.3s;
+            min-height: 44px;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #00dbde;
+            box-shadow: 0 0 10px rgba(0, 219, 222, 0.2);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 500;
+            font-size: clamp(0.95rem, 2vw, 1rem);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #00dbde, #0099ff);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: rgba(100, 150, 255, 0.2);
+            color: #a0a0ff;
+            border: 1px solid rgba(100, 150, 255, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #0099ff, #00dbde);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(100, 150, 255, 0.3);
+            color: #ffffff;
+        }
+        
+        .field-management {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 150, 255, 0.2);
+        }
+        
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            background: rgba(15, 25, 45, 0.7);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            min-height: 350px;
+            border: 2px dashed rgba(100, 150, 255, 0.3);
+            width: 100%;
+        }
+        
+        #qrcode {
+            width: min(250px, 80vw);
+            height: min(250px, 80vw);
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #qrcode img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .qr-placeholder {
+            text-align: center;
+            color: #8080cc;
+            padding: 20px;
+        }
+        
+        .qr-placeholder i {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 15px;
+            color: #5050aa;
+        }
+        
+        .qr-placeholder p {
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .qr-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .qr-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .qr-customization {
+            background: rgba(15, 25, 45, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+        }
+        
+        .customization-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .custom-option {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .custom-option label {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: #b0c4ff;
+            margin-bottom: 5px;
+        }
+        
+        .qr-info {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(20, 30, 50, 0.5);
+            border-radius: 10px;
+        }
+        
+        .qr-info h3 {
+            color: #00dbde;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+        }
+        
+        .qr-info p {
+            color: #b0c4ff;
+            line-height: 1.7;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        
+        .business-use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .use-case {
+            background: rgba(30, 40, 70, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #0099ff;
+        }
+        
+        .use-case h4 {
+            color: #00dbde;
+            margin-bottom: 8px;
+            font-size: clamp(0.95rem, 2vw, 1rem);
+        }
+        
+        .use-case p {
+            font-size: clamp(0.85rem, 2vw, 0.9rem);
+            color: #b0c4ff;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #8080cc;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            border-top: 1px solid rgba(100, 150, 255, 0.1);
+        }
+        
+        .copyright a {
+            color: #00dbde;
+            text-decoration: none;
+        }
+        
+        .copyright a:hover {
+            text-decoration: underline;
+        }
+        
+        .preview-text {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(10, 20, 40, 0.6);
+            border-radius: 8px;
+            font-size: clamp(0.85rem, 2vw, 0.9rem);
+            color: #b0c4ff;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 219, 222, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 219, 222, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 219, 222, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* ============================================
+           RESPONSIVE FIXES - CLEAN VERSION
+           ============================================ */
+        
+        /* Large Tablets and Small Laptops */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 95%;
+                padding: 15px;
+            }
+            
+            .main-content {
+                gap: 30px;
+            }
+            
+            .input-section, .output-section {
+                padding: 25px;
+            }
+        }
+        
+        /* Tablets */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .input-section, .output-section {
+                width: 100%;
+                min-width: 100%;
+            }
+            
+            .business-categories {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .field-management {
+                justify-content: center;
+            }
+            
+            .qr-controls, .qr-actions {
+                justify-content: center;
+            }
+            
+            .customization-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .business-use-cases {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Large Mobile */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .input-section, .output-section {
+                padding: 20px;
+            }
+            
+            .business-categories {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .category-btn {
+                padding: 12px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .category-btn i {
+                font-size: 1.3rem;
+            }
+            
+            .field-group {
+                padding: 15px;
+            }
+            
+            .field-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .field-title-container {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+            }
+            
+            .field-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .btn:last-child {
+                margin-bottom: 0;
+            }
+            
+            .field-management, .qr-controls, .qr-actions {
+                flex-direction: column;
+            }
+            
+            .qr-container {
+                padding: 20px;
+                min-height: 300px;
+            }
+            
+            #qrcode {
+                width: min(220px, 70vw);
+                height: min(220px, 70vw);
+            }
+            
+            .customization-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .business-use-cases {
+                grid-template-columns: 1fr;
+            }
+            
+            .use-case {
+                padding: 12px;
+            }
+        }
+        
+        /* Small Mobile */
+        @media (max-width: 576px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 5px;
+            }
+            
+            header {
+                margin-bottom: 25px;
+                padding-top: 10px;
+            }
+            
+            .business-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-btn {
+                padding: 15px;
+            }
+            
+            .fields-container {
+                gap: 15px;
+            }
+            
+            .field-group {
+                padding: 12px;
+            }
+            
+            .field-title {
+                font-size: 1rem;
+            }
+            
+            .edit-field-name {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+            
+            .remove-field, .move-field {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            input, textarea, select {
+                padding: 12px 14px;
+                font-size: 1rem;
+            }
+            
+            .qr-container {
+                padding: 15px;
+                min-height: 280px;
+            }
+            
+            #qrcode {
+                width: min(200px, 65vw);
+                height: min(200px, 65vw);
+                padding: 10px;
+            }
+            
+            .qr-customization {
+                padding: 15px;
+            }
+            
+            .preview-text {
+                padding: 12px;
+                font-size: 0.85rem;
+                max-height: 150px;
+            }
+            
+            .qr-info {
+                padding: 15px;
+            }
+            
+            .copyright {
+                padding: 15px;
+                margin-top: 30px;
+            }
+        }
+        
+        /* Extra Small Mobile */
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 5px;
+            }
+            
+            .input-section, .output-section {
+                padding: 15px;
+                border-radius: 12px;
+            }
+            
+            .field-header {
+                gap: 8px;
+            }
+            
+            .field-title-container {
+                flex-wrap: wrap;
+            }
+            
+            .field-actions {
+                flex-wrap: wrap;
+                gap: 5px;
+                justify-content: center;
+            }
+            
+            .remove-field, .move-field {
+                flex: 1;
+                min-width: 45%;
+                text-align: center;
+            }
+            
+            .btn {
+                padding: 12px 15px;
+                font-size: 0.95rem;
+            }
+            
+            #qrcode {
+                width: min(180px, 60vw);
+                height: min(180px, 60vw);
+            }
+        }
+        
+        /* Tablet Landscape */
+        @media (min-width: 768px) and (max-width: 992px) and (orientation: landscape) {
+            .main-content {
+                flex-direction: row;
+            }
+            
+            .input-section, .output-section {
+                flex: 1;
+            }
+            
+            .business-categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Fix for iOS zoom on input focus */
+        @media (max-width: 768px) {
+            input, textarea, select {
+                font-size: 16px;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            .input-section, .qr-controls, .qr-actions, .qr-customization, .field-management, .copyright {
+                display: none;
+            }
+            
+            .output-section {
+                background: white;
+                color: black;
+                border: 1px solid #ccc;
+                box-shadow: none;
+            }
+            
+            .qr-container {
+                border: 1px solid #ccc;
+            }
+            
+            #qrcode {
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-building"></i> QRBiz Pro</h1>
+            <p class="tagline">Professional Business QR Code Generator for Companies & Organizations</p>
+        </header>
+        
+        <main>
+            <div class="main-content">
+                <section class="input-section">
+                    <h2 class="section-title"><i class="fas fa-edit"></i> Business Information</h2>
+                    
+                    <div class="business-categories">
+                        <div class="category-btn active" onclick="loadBusinessTemplate('corporate')">
+                            <i class="fas fa-building"></i>
+                            <div>Corporate</div>
+                        </div>
+                        <div class="category-btn" onclick="loadBusinessTemplate('small-business')">
+                            <i class="fas fa-store"></i>
+                            <div>Small Business</div>
+                        </div>
+                        <div class="category-btn" onclick="loadBusinessTemplate('professional')">
+                            <i class="fas fa-user-tie"></i>
+                            <div>Professional</div>
+                        </div>
+                        <div class="category-btn" onclick="loadBusinessTemplate('event')">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div>Event</div>
+                        </div>
+                        <div class="category-btn" onclick="loadBusinessTemplate('marketing')">
+                            <i class="fas fa-bullhorn"></i>
+                            <div>Marketing</div>
+                        </div>
+                        <div class="category-btn" onclick="loadBusinessTemplate('custom')">
+                            <i class="fas fa-sliders-h"></i>
+                            <div>Custom</div>
+                        </div>
+                    </div>
+                    
+                    <div class="fields-container" id="fieldsContainer">
+                        <!-- Dynamic fields will be added here -->
+                        <div class="field-group" id="field-1">
+                            <div class="field-header">
+                                <div class="field-title-container">
+                                    <span class="field-title">Company Name</span>
+                                    <button class="edit-field-name" onclick="editFieldName('field-1')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </div>
+                                <div class="field-actions">
+                                    <button class="move-field" onclick="moveFieldUp('field-1')">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button class="move-field" onclick="moveFieldDown('field-1')">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                    <button class="remove-field" onclick="removeField('field-1')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="text" id="field-1-input" placeholder="Enter company/organization name" value="" oninput="generateQRCode()">
+                        </div>
+                        
+                        <div class="field-group" id="field-2">
+                            <div class="field-header">
+                                <div class="field-title-container">
+                                    <span class="field-title">Contact Person</span>
+                                    <button class="edit-field-name" onclick="editFieldName('field-2')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </div>
+                                <div class="field-actions">
+                                    <button class="move-field" onclick="moveFieldUp('field-2')">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button class="move-field" onclick="moveFieldDown('field-2')">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                    <button class="remove-field" onclick="removeField('field-2')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="text" id="field-2-input" placeholder="Enter contact person name" value="John Smith" oninput="generateQRCode()">
+                        </div>
+                    </div>
+                    
+                    <div class="field-management">
+                        <button class="btn btn-secondary" onclick="addBusinessField('company')">
+                            <i class="fas fa-plus"></i> Add Company Field
+                        </button>
+                        <button class="btn btn-secondary" onclick="addBusinessField('contact')">
+                            <i class="fas fa-user"></i> Add Contact Field
+                        </button>
+                        <button class="btn btn-secondary" onclick="addBusinessField('address')">
+                            <i class="fas fa-map-marker-alt"></i> Add Address Field
+                        </button>
+                    </div>
+                    
+                    <div class="qr-controls">
+                        <button class="btn btn-primary pulse" onclick="generateQRCode()">
+                            <i class="fas fa-sync-alt"></i> Generate QR Code
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearAllFields()">
+                            <i class="fas fa-eraser"></i> Clear All
+                        </button>
+                    </div>
+                </section>
+                
+                <section class="output-section">
+                    <h2 class="section-title"><i class="fas fa-qrcode"></i> Business QR Code <button><a href="/qreader.html">Scan Qr</a></button></h2>
+                    
+                    <div class="qr-container">
+                        <div id="qrcode">
+                            <div class="qr-placeholder">
+                                <i class="fas fa-qrcode"></i>
+                                <p>Business QR Code will appear here</p>
+                                <p>Add your company information and click "Generate QR Code"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-customization">
+                        <h3 style="color: #00dbde; margin-bottom: 15px; font-size: 1.1rem;">
+                            <i class="fas fa-palette"></i> QR Code Customization
+                        </h3>
+                        <div class="customization-grid">
+                            <div class="custom-option">
+                                <label>Size:</label>
+                                <select id="qrSize" onchange="updateQRSize()">
+                                    <option value="200">Small (200px)</option>
+                                    <option value="250" selected>Medium (250px)</option>
+                                    <option value="300">Large (300px)</option>
+                                </select>
+                            </div>
+                            <div class="custom-option">
+                                <label>Color:</label>
+                                <select id="qrColor" onchange="updateQRColor()">
+                                    <option value="#000000" selected>Black</option>
+                                    <option value="#0066cc">Blue</option>
+                                    <option value="#009933">Green</option>
+                                    <option value="#cc0000">Red</option>
+                                    <option value="#663399">Purple</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-actions">
+                        <button class="btn btn-success" onclick="downloadQRCode()" id="downloadBtn" disabled>
+                            <i class="fas fa-download"></i> Download QR Code
+                        </button>
+                        <button class="btn btn-warning" onclick="shareBusinessCard()" id="shareBtn" disabled>
+                            <i class="fas fa-share-alt"></i> Share Business Card
+                        </button>
+                    </div>
+                    
+                    <div class="preview-text" id="previewText">
+                        <strong>Business Information Preview:</strong><br>
+                        No business information added yet. Add fields to see preview.
+                    </div>
+                    
+                    <div class="qr-info">
+                        <h3>Business Use Cases</h3>
+                        <div class="business-use-cases">
+                            <div class="use-case">
+                                <h4><i class="fas fa-id-card"></i> Business Cards</h4>
+                                <p>Embed QR codes on business cards for instant digital contact sharing</p>
+                            </div>
+                            <div class="use-case">
+                                <h4><i class="fas fa-map-marked-alt"></i> Office Locations</h4>
+                                <p>Add QR codes to office entrances with directions and contact info</p>
+                            </div>
+                            <div class="use-case">
+                                <h4><i class="fas fa-box"></i> Product Packaging</h4>
+                                <p>Include QR codes on products for warranty, support, and registration</p>
+                            </div>
+                            <div class="use-case">
+                                <h4><i class="fas fa-file-invoice"></i> Invoices & Receipts</h4>
+                                <p>Add QR codes to invoices for quick payment and customer support</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <footer>
+            <div class="copyright">
+                <p>&copy; 2023 <a href="https://thisizasif.com" target="_blank">thisizasif</a> | QRBiz Pro - Professional Business QR Code Generator</p>
+                <p>Designed specifically for companies, organizations, and business professionals</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        let fieldCounter = 3;
+        let qrGenerated = false;
+        let qrcodeInstance = null;
+        let currentSize = 250;
+        let currentColor = "#000000";
+        
+        // Business field configurations
+        const businessFieldTypes = {
+            'company': {
+                title: 'Company Name',
+                placeholder: 'Enter company/organization name',
+                type: 'text',
+                icon: 'fas fa-building'
+            },
+            'contact': {
+                title: 'Contact Person',
+                placeholder: 'Enter contact person name',
+                type: 'text',
+                icon: 'fas fa-user-tie'
+            },
+            'email': {
+                title: 'Email Address',
+                placeholder: 'contact@company.com',
+                type: 'email',
+                icon: 'fas fa-envelope'
+            },
+            'phone': {
+                title: 'Phone Number',
+                placeholder: '+1 (555) 123-4567',
+                type: 'tel',
+                icon: 'fas fa-phone'
+            },
+            'website': {
+                title: 'Website URL',
+                placeholder: 'https://companywebsite.com',
+                type: 'url',
+                icon: 'fas fa-globe'
+            },
+            'address': {
+                title: 'Business Address',
+                placeholder: '123 Business Street, City, State, ZIP',
+                type: 'text',
+                icon: 'fas fa-map-marker-alt'
+            },
+            'position': {
+                title: 'Job Title/Position',
+                placeholder: 'CEO, Manager, Director, etc.',
+                type: 'text',
+                icon: 'fas fa-briefcase'
+            },
+            'department': {
+                title: 'Department',
+                placeholder: 'Sales, Marketing, IT, HR, etc.',
+                type: 'text',
+                icon: 'fas fa-sitemap'
+            },
+            'social': {
+                title: 'Social Media',
+                placeholder: 'LinkedIn, Twitter, Instagram handles',
+                type: 'text',
+                icon: 'fas fa-hashtag'
+            },
+            'services': {
+                title: 'Services/Products',
+                placeholder: 'Main services or products offered',
+                type: 'text',
+                icon: 'fas fa-box'
+            }
+        };
+        
+        // Business templates
+        const businessTemplates = {
+            'corporate': [
+                {type: 'company', value: ''},
+                {type: 'contact', value: 'Sarah Johnson'},
+                {type: 'position', value: ''},
+                {type: 'email', value: ''},
+                {type: 'phone', value: ''},
+                {type: 'website', value: 'https://globalcorp.com'},
+                {type: 'address', value: '123 Corporate Ave, New York, NY 10001'}
+            ],
+            'small-business': [
+                {type: 'company', value: 'Local Coffee Shop'},
+                {type: 'contact', value: 'Michael Brown'},
+                {type: 'position', value: 'Owner/Manager'},
+                {type: 'email', value: 'contact@localcoffee.com'},
+                {type: 'phone', value: '+1 (555) 123-4567'},
+                {type: 'website', value: 'https://localcoffee.com'},
+                {type: 'address', value: '456 Main Street, Anytown, USA'},
+                {type: 'services', value: 'Coffee, Pastries, Wi-Fi, Meeting Space'}
+            ],
+            'professional': [
+                {type: 'company', value: 'Smith & Associates'},
+                {type: 'contact', value: 'Dr. Robert Smith'},
+                {type: 'position', value: 'Senior Consultant'},
+                {type: 'email', value: 'robert.smith@smithconsulting.com'},
+                {type: 'phone', value: '+1 (555) 987-6543'},
+                {type: 'website', value: 'https://smithconsulting.com'},
+                {type: 'social', value: 'LinkedIn: linkedin.com/in/robertsmith'}
+            ],
+            'event': [
+                {type: 'company', value: 'Tech Conference 2023'},
+                {type: 'contact', value: 'Event Coordinator'},
+                {type: 'email', value: 'info@techconference2023.com'},
+                {type: 'phone', value: '+1 (800) 555-EVENT'},
+                {type: 'website', value: 'https://techconference2023.com'},
+                {type: 'address', value: 'Convention Center, 789 Event Blvd, City'},
+                {type: 'services', value: 'Tech Talks, Networking, Workshops, Exhibitions'}
+            ],
+            'marketing': [
+                {type: 'company', value: 'Digital Marketing Agency'},
+                {type: 'contact', value: 'Marketing Director'},
+                {type: 'email', value: 'hello@digitalmarketing.com'},
+                {type: 'phone', value: '+1 (555) 321-0987'},
+                {type: 'website', value: 'https://digitalmarketing.com'},
+                {type: 'social', value: 'Instagram: @digitalmarketing, Twitter: @digitalmktg'},
+                {type: 'services', value: 'SEO, Social Media, PPC, Content Marketing'}
+            ]
+        };
+        
+        // Load business template
+        function loadBusinessTemplate(templateName) {
+            // Update active category button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.category-btn').classList.add('active');
+            
+            // Clear existing fields
+            clearAllFields();
+            
+            // Load template if not custom
+            if (templateName !== 'custom' && businessTemplates[templateName]) {
+                const template = businessTemplates[templateName];
+                template.forEach((field, index) => {
+                    setTimeout(() => {
+                        addBusinessField(field.type, field.value);
+                    }, index * 100);
+                });
+                
+                setTimeout(() => {
+                    generateQRCode();
+                }, template.length * 100 + 500);
+            }
+        }
+        
+        // Add a business field
+        function addBusinessField(type, presetValue = '') {
+            const fieldId = `field-${fieldCounter}`;
+            const fieldConfig = businessFieldTypes[type] || businessFieldTypes['company'];
+            
+            const fieldHTML = `
+                <div class="field-group" id="${fieldId}">
+                    <div class="field-header">
+                        <div class="field-title-container">
+                            <span class="field-title">${fieldConfig.title}</span>
+                            <button class="edit-field-name" onclick="editFieldName('${fieldId}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                        <div class="field-actions">
+                            <button class="move-field" onclick="moveFieldUp('${fieldId}')">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                            <button class="move-field" onclick="moveFieldDown('${fieldId}')">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                            <button class="remove-field" onclick="removeField('${fieldId}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="${fieldConfig.type}" id="${fieldId}-input" placeholder="${fieldConfig.placeholder}" oninput="generateQRCode()" value="${presetValue}">
+                </div>
+            `;
+            
+            document.getElementById('fieldsContainer').insertAdjacentHTML('beforeend', fieldHTML);
+            fieldCounter++;
+            
+            // Update QR code
+            generateQRCode();
+        }
+        
+        // Edit field name
+        function editFieldName(fieldId) {
+            const fieldElement = document.getElementById(fieldId);
+            const titleElement = fieldElement.querySelector('.field-title');
+            const currentTitle = titleElement.textContent;
+            
+            const newTitle = prompt('Enter new field name:', currentTitle);
+            if (newTitle && newTitle.trim() !== '') {
+                titleElement.textContent = newTitle.trim();
+                generateQRCode();
+            }
+        }
+        
+        // Move field up
+        function moveFieldUp(fieldId) {
+            const fieldElement = document.getElementById(fieldId);
+            const previousElement = fieldElement.previousElementSibling;
+            
+            if (previousElement) {
+                fieldElement.parentNode.insertBefore(fieldElement, previousElement);
+                generateQRCode();
+            }
+        }
+        
+        // Move field down
+        function moveFieldDown(fieldId) {
+            const fieldElement = document.getElementById(fieldId);
+            const nextElement = fieldElement.nextElementSibling;
+            
+            if (nextElement) {
+                fieldElement.parentNode.insertBefore(nextElement, fieldElement);
+                generateQRCode();
+            }
+        }
+        
+        // Remove a field
+        function removeField(fieldId) {
+            const fieldElement = document.getElementById(fieldId);
+            if (fieldElement) {
+                fieldElement.remove();
+                generateQRCode();
+            }
+        }
+        
+        // Clear all fields
+        function clearAllFields() {
+            document.getElementById('fieldsContainer').innerHTML = '';
+            document.getElementById('qrcode').innerHTML = `
+                <div class="qr-placeholder">
+                    <i class="fas fa-qrcode"></i>
+                    <p>Business QR Code will appear here</p>
+                    <p>Add your company information and click "Generate QR Code"</p>
+                </div>
+            `;
+            document.getElementById('previewText').innerHTML = '<strong>Business Information Preview:</strong><br>No business information added yet. Add fields to see preview.';
+            document.getElementById('downloadBtn').disabled = true;
+            document.getElementById('shareBtn').disabled = true;
+            qrGenerated = false;
+            qrcodeInstance = null;
+        }
+        
+        // Update QR size
+        function updateQRSize() {
+            currentSize = parseInt(document.getElementById('qrSize').value);
+            if (qrGenerated) {
+                generateQRCode();
+            }
+        }
+        
+        // Update QR color
+        function updateQRColor() {
+            currentColor = document.getElementById('qrColor').value;
+            if (qrGenerated) {
+                generateQRCode();
+            }
+        }
+        
+        // Generate QR code from all fields
+        function generateQRCode() {
+            const fieldsContainer = document.getElementById('fieldsContainer');
+            const fieldGroups = fieldsContainer.querySelectorAll('.field-group');
+            
+            if (fieldGroups.length === 0) {
+                document.getElementById('previewText').innerHTML = '<strong>Business Information Preview:</strong><br>No business information added yet. Add fields to see preview.';
+                return;
+            }
+            
+            let qrContent = '';
+            let previewContent = '<strong>Business Information Preview:</strong><br>';
+            
+            fieldGroups.forEach((fieldGroup) => {
+                const input = fieldGroup.querySelector('input');
+                const title = fieldGroup.querySelector('.field-title').textContent;
+                
+                if (input && input.value.trim() !== '') {
+                    qrContent += `${title}: ${input.value.trim()}\n`;
+                    previewContent += `<strong>${title}:</strong> ${input.value.trim()}<br>`;
+                }
+            });
+            
+            // Update preview text
+            document.getElementById('previewText').innerHTML = previewContent;
+            
+            // Generate QR code if there's content
+            if (qrContent.trim() !== '') {
+                try {
+                    // Clear previous QR code
+                    const qrcodeElement = document.getElementById('qrcode');
+                    qrcodeElement.innerHTML = '';
+                    
+                    // Update container size
+                    qrcodeElement.style.width = `${currentSize}px`;
+                    qrcodeElement.style.height = `${currentSize}px`;
+                    
+                    // Generate new QR code using QRCode.js
+                    qrcodeInstance = new QRCode(qrcodeElement, {
+                        text: qrContent,
+                        width: currentSize - 30,
+                        height: currentSize - 30,
+                        colorDark: currentColor,
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    
+                    document.getElementById('downloadBtn').disabled = false;
+                    document.getElementById('shareBtn').disabled = false;
+                    qrGenerated = true;
+                } catch (error) {
+                    console.error('QR Code generation error:', error);
+                    document.getElementById('qrcode').innerHTML = `
+                        <div class="qr-placeholder">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Error generating QR code</p>
+                            <p>Please try with different content</p>
+                        </div>
+                    `;
+                    document.getElementById('downloadBtn').disabled = true;
+                    document.getElementById('shareBtn').disabled = true;
+                    qrGenerated = false;
+                }
+            } else {
+                document.getElementById('qrcode').innerHTML = `
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
+                        <p>Business QR Code will appear here</p>
+                        <p>Add your company information and click "Generate QR Code"</p>
+                    </div>
+                `;
+                document.getElementById('downloadBtn').disabled = true;
+                document.getElementById('shareBtn').disabled = true;
+                qrGenerated = false;
+            }
+        }
+        
+        // Download QR code as PNG
+        function downloadQRCode() {
+            if (!qrGenerated) return;
+            
+            const qrCanvas = document.querySelector('#qrcode canvas');
+            if (!qrCanvas) return;
+            
+            // Get the canvas as data URL
+            const dataURL = qrCanvas.toDataURL('image/png');
+            
+            // Create download link
+            const downloadLink = document.createElement('a');
+            downloadLink.href = dataURL;
+            downloadLink.download = 'business-qr-code-' + new Date().getTime() + '.png';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Visual feedback
+            const downloadBtn = document.getElementById('downloadBtn');
+            const originalHTML = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
+            downloadBtn.style.background = 'linear-gradient(to right, #00b09b, #96c93d)';
+            
+            setTimeout(() => {
+                downloadBtn.innerHTML = originalHTML;
+                downloadBtn.style.background = '';
+            }, 2000);
+        }
+        
+        // Share business card
+        function shareBusinessCard() {
+            if (!qrGenerated) return;
+            
+            // Get business information
+            const fieldsContainer = document.getElementById('fieldsContainer');
+            const fieldGroups = fieldsContainer.querySelectorAll('.field-group');
+            
+            let businessInfo = '';
+            fieldGroups.forEach((fieldGroup) => {
+                const input = fieldGroup.querySelector('input');
+                const title = fieldGroup.querySelector('.field-title').textContent;
+                
+                if (input && input.value.trim() !== '') {
+                    businessInfo += `${title}: ${input.value.trim()}\n`;
+                }
+            });
+            
+            const shareTitle = 'Business Card QR Code';
+            const shareText = `Business Information:\n\n${businessInfo}\n\nGenerated with QRBiz Pro by thisizasif`;
+            const shareUrl = window.location.href;
+            
+            // Check if Web Share API is available
+            if (navigator.share) {
+                navigator.share({
+                    title: shareTitle,
+                    text: shareText,
+                    url: shareUrl,
+                })
+                .then(() => console.log('Business card shared successfully'))
+                .catch((error) => console.log('Error sharing:', error));
+            } else {
+                // Fallback: Copy to clipboard
+                navigator.clipboard.writeText(`${shareText}\n\n${shareUrl}`)
+                    .then(() => {
+                        alert('Business information copied to clipboard! You can now paste it anywhere.');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+            }
+            
+            // Visual feedback
+            const shareBtn = document.getElementById('shareBtn');
+            const originalHTML = shareBtn.innerHTML;
+            shareBtn.innerHTML = '<i class="fas fa-check"></i> Shared!';
+            shareBtn.style.background = 'linear-gradient(to right, #ff9966, #ff5e62)';
+            
+            setTimeout(() => {
+                shareBtn.innerHTML = originalHTML;
+                shareBtn.style.background = '';
+            }, 2000);
+        }
+        
+        // Initialize with corporate template
+        window.addEventListener('DOMContentLoaded', () => {
+            // Give a small delay to ensure QRCode library is loaded
+            setTimeout(() => {
+                generateQRCode();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
